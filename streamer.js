@@ -26,8 +26,9 @@ export const getFileLocation = async (MsgId, client) => {
     fileReference: document.fileReference,
     thumbSize: ""
   });
- 
-  return { location, document };
+  const filename = document?.attributes?.find(f=>f?.className === "DocumentAttributeFilename")?.fileName ?? fileURLToPath.bin
+  const mimeType = document?.mimeType
+  return { location, document ,mimeType,filename};
 };
 
 export const createStream = async (start, end, document, location, { client, id }) => {

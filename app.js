@@ -12,7 +12,7 @@ app.get("/stream/:id", async (req, res) => {
     try {
         client = getFastestClient()
         const { id } = req.params;
-        const { document, location } = await getFileLocation(id, client.client);
+        const { document, location, mimeType,filename } = await getFileLocation(id, client.client);
         const fileSize = document.size;
 
         let start = 0;
@@ -34,7 +34,8 @@ app.get("/stream/:id", async (req, res) => {
             "Content-Range": `bytes ${start}-${end}/${fileSize}`,
             "Content-Length": contentLength,
             "Access-Control-Allow-Origin": "*",
-            "Content-Disposition": `inline; filename="file_${id}"`
+            "Content-Disposition": `inline; filename="${filename}"`,
+            "Content-Type": mimeType ?? "application/octet-stream"
         });
 
         const readStream = await createStream(start, end, document, location, client);
@@ -60,14 +61,14 @@ app.get("/download/:id", async (req, res) => {
     try {
         client = getFastestClient()
         const { id } = req.params;
-        const { document, location } = await getFileLocation(id, client.client);
+        const { document, location , mimeType,filename} = await getFileLocation(id, client.client);
         const fileSize = document.size;
 
         res.status(200).set({
             "Access-Control-Allow-Origin": "*",
             "Content-Length": fileSize,
-            "Content-Disposition": `attachment; filename="file_${id}.mkv"`,
-            "Content-Type": "application/octet-stream"
+            "Content-Disposition": `attachment; filename="${filename}"`,
+            "Content-Type": mimeType ?? "application/octet-stream"
         });
 
         const readStream = await createStream(0, fileSize - 1, document, location, client);
