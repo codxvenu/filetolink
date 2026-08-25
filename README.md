@@ -117,6 +117,9 @@ botToken=BOT_TOKEN_1|BOT_TOKEN_2|BOT_TOKEN_3
 # The main interaction bot StringSession
 session=YOUR_BOT_STRING_SESSION
 
+# Token for using telegram bot interface 
+TGbotToken=TOKEN
+
 # Backup channel ID where media files are stored/forwarded
 backupChannel=-100XXXXXXXXXX
 ```
