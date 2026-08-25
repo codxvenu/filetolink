@@ -1,8 +1,9 @@
 import fs from "node:fs"
+import { getStatsTg } from "../../config/db.js";
 
 
 export function cmd(cmd){
-    return fs.readFileSync(`./constants/${cmd}.md`).toString();
+    return fs.readFileSync(`./tgbot/constants/${cmd}.md`).toString();
 }
 export function getMediaDetails(message){
   console.log(message.media.document.attributes)
@@ -14,4 +15,23 @@ export function size(n){
 }
 export function genLink({id,filesize,filename}){
   return cmd("link").replaceAll("{id}",id).replace("{filename}",filename).replace("{filesize}",filesize);
+}
+function formatUptime(seconds) {
+    seconds = Math.floor(seconds);
+
+    const days = Math.floor(seconds / 86400);
+    seconds %= 86400;
+
+    const hours = Math.floor(seconds / 3600);
+    seconds %= 3600;
+
+    const minutes = Math.floor(seconds / 60);
+    seconds %= 60;
+
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+export function stat(){
+  const uptime = process.uptime();
+  const {botcount,workload} = getStatsTg()
+  return cmd("stat").replace("{uptime}",formatUptime(uptime)).replace("{botcount}",botcount).replace("{workload}",workload);
 }

@@ -91,3 +91,8 @@ export function getStats(){
     }).join("")
     return message
 }
+export function getStatsTg(){
+    const botcount = bots.length;
+    const workload = bots.reduce((acc,b)=>(acc+b.workload),0)
+     return {botcount,workload}
+}

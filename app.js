@@ -1,11 +1,12 @@
 import express from "express";
 import { createStream, getFileLocation } from "./streamer.js";
 import { getFastestClient, getStats, initializeClients, releaseClient } from "./config/db.js";
+import { initializeBot } from "./tgbot/app.js";
 
 const app = express();
 
-await initializeClients()
-
+await initializeClients();
+await initializeBot();
 
 app.get("/stream/:id", async (req, res) => {
     let client;
